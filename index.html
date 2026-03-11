@@ -621,12 +621,19 @@
   });
 
   googleBtn.addEventListener('click', async () => {
-    await window.Clerk.load();
-    await window.Clerk.signIn.authenticateWithRedirect({
-      strategy: 'oauth_google',
-      redirectUrl: window.location.href,
-      redirectUrlComplete: window.location.href
-    });
+    try {
+      clearError();
+      await window.Clerk.load();
+      const signIn = await window.Clerk.client.signIn.create({
+        strategy: 'oauth_google',
+        redirectUrl: window.location.origin + window.location.pathname,
+        actionCompleteRedirectUrl: window.location.origin + window.location.pathname,
+      });
+      const googleAuth = signIn.firstFactorVerification;
+      window.location.href = googleAuth.externalVerificationRedirectURL;
+    } catch(e) {
+      showError(e.errors?.[0]?.message || 'Google sign in failed. Please try email instead.');
+    }
   });
 
   submitBtn.addEventListener('click', async () => {
