@@ -218,6 +218,21 @@
     }
     #login-error.show { display: block; }
 
+    /* Disclaimer */
+    .disclaimer {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 16px; padding: 12px 14px;
+      background: var(--surface2); border: 1px solid var(--border2); border-radius: 10px;
+      cursor: none;
+    }
+    .disclaimer input[type="checkbox"] {
+      width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px;
+      accent-color: var(--accent); cursor: none;
+    }
+    .disclaimer label {
+      font-size: 12px; color: var(--ink-mid); line-height: 1.55; cursor: none;
+    }
+
     /* Steps */
     .step { display: none; }
     .step.active { display: block; }
@@ -392,6 +407,11 @@
           <input type="text" id="firstname-input" placeholder="Your first name" style="margin-bottom:10px;"/>
           <label>Last name</label>
           <input type="text" id="lastname-input" placeholder="Your last name"/>
+        </div>
+
+        <div class="disclaimer">
+          <input type="checkbox" id="disclaimer-check"/>
+          <label for="disclaimer-check">I agree that I will not use Orvix without permission on a school device.</label>
         </div>
 
         <button class="submit-btn" id="main-submit-btn">
@@ -592,6 +612,12 @@
       if(e.key==='Backspace' && !inp.value && i>0) otpInputs[i-1].focus();
     });
   });
+
+  const disclaimerCheck = document.getElementById('disclaimer-check');
+  disclaimerCheck.addEventListener('change', () => {
+    submitBtn.disabled = !disclaimerCheck.checked;
+  });
+  submitBtn.disabled = true;
 
   // Email input — show password field on Enter or blur for sign-in
   emailInput.addEventListener('keydown', e => { if(e.key==='Enter') submitBtn.click(); });
